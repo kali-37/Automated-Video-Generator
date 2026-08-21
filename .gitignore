@@ -26,3 +26,8 @@ genera_tiny_luv/
 
 # Graphify generated output
 graphify-out/
+
+# Local scripts and notes
+claude_script.sh
+what_next.md
+why_image.md
