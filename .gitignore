@@ -24,11 +24,5 @@ download.mp4
 genera_asmr/
 genera_tiny_luv/
 
-# Master prompts
-MASTER_PROMPT_*.md
-MASTER_PROMPT_*.md.back
-
-# Misc
-what_next.md
-why_image.md
-.gitattributes
+# Graphify generated output
+graphify-out/

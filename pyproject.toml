@@ -1,0 +1,12 @@
+[project]
+name = "automated-video-generator"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "edge-tts>=7.2.7",
+    "google-auth>=2.48.0",
+    "google-cloud-aiplatform>=1.138.0",
+    "requests>=2.32.5",
+]
