@@ -13,3 +13,22 @@ wheels/
 credentials.json
 video-gen-*-key.json
 *.key.json
+
+# Media files and large assets
+*.mp4
+*.zip
+assets.zip
+download.mp4
+
+# Generated content folders
+genera_asmr/
+genera_tiny_luv/
+
+# Master prompts
+MASTER_PROMPT_*.md
+MASTER_PROMPT_*.md.back
+
+# Misc
+what_next.md
+why_image.md
+.gitattributes
