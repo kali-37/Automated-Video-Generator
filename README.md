@@ -180,8 +180,49 @@ python tiktok_uploader.py
 
 ---
 
-## Security
+## Credentials & access
 
-Credential files (`credentials.json`, `video-gen-*-key.json`, `*.key.json`),
-generation assets, and raw media are gitignored. **Never commit keys.** Rotate
-any key that has been exposed.
+The pipeline is credential-driven, and **all secret material is excluded from
+version control** — `credentials.json`, `video-gen-*-key.json`, `*.key.json`,
+and the entire `assets/` / `genera_*/` trees are gitignored. You can clone this
+repo anywhere and drop in your own keys without risk of leaking them.
+
+### 1. Provision a GCP project
+
+1. Create a project in the [Google Cloud Console](https://console.cloud.google.com/).
+2. Enable the **Vertex AI API** (powers Veo 3.1 video generation).
+3. Create a **Service Account** with the `Cloud Vertex AI User` role and export
+   its JSON key as `video-gen-<id>-key.json` in the project root (auto-discovered
+   by `constants.py`), or point `GCP_KEY_FILE` at it.
+4. _Optional:_ for the `gemini_api` backend, grab a key from
+   [Google AI Studio](https://aistudio.google.com/apikey) and add it to
+   `GEMINI_API_KEYS`.
+
+> New to GCP? Google offers **$300 in free credits** for the first 90 days —
+> plenty to validate the full pipeline end to end before spending real money.
+
+### 2. Wire up authentication for CLI invocation
+
+The toolchain authenticates at runtime, so once the key file is in place there
+is nothing to export per-command:
+
+```bash
+# place your service-account key (auto-detected) or be explicit
+export GCP_KEY_FILE=video-gen-1234567-key.json
+
+# verify the project is reachable from the CLI
+python video_pipeline_v31.py --help
+```
+
+For managed publishers (YouTube/TikTok), drop `client_secrets.json` (YouTube
+OAuth) into the root and set `TIKTOK_SESSION_ID` for TikTok — both are
+gitignored as well.
+
+### 3. Operational guardrails
+
+- **Least privilege:** scope the service account to Vertex AI only; no
+  project-owner or billing-admin roles.
+- **Rotation:** regenerate keys on a schedule and the moment a key is suspected
+  exposed — the pipeline supports multiple `GEMINI_API_KEYS` for seamless swaps.
+- **Local-only secrets:** keys are read from disk/`ENV`, never embedded in code
+  or committed. CI should inject them as masked secrets, not artifacts.
